@@ -66,32 +66,12 @@ class Game(object):
   def has_connected_discs(self, start_point, row_size=4):
     start_state = self.grid.at(start_point)
     if start_state is not DiscState.empty:
-      return self.is_in_connected_row(start_point, row_size) or \
+      return grid_utils.is_in_row_run(self.grid, start_point, row_size) or \
         self.is_in_connected_col(start_point, row_size) or \
         self.is_in_connected_diag_down(start_point, row_size) or \
         self.is_in_connected_diag_up(start_point, row_size)
     else:
       return False
-
-  def is_in_connected_row(self, point, length):
-    start_state = self.grid.at(point)
-    if start_state is DiscState.empty:
-      return False
-    num_matches_left = grid_utils.run_len(
-      self.grid,
-      grid_utils.gen_straight_path(self.grid,
-                                   Point(point.row, point.col - 1),
-                                   Point(0, -1),
-                                   length - 1),
-      start_state)
-    num_matches_right = grid_utils.run_len(
-      self.grid,
-      grid_utils.gen_straight_path(self.grid,
-                                   Point(point.row, point.col + 1),
-                                   Point(0, 1),
-                                   length - 1),
-      start_state)
-    return num_matches_left + num_matches_right >= length - 1
 
   def is_in_connected_col(self, point, length):
     start_state = self.grid.at(point)

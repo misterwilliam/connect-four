@@ -35,3 +35,16 @@ class GenStraightPath(TestCase):
     g = Grid(3, 3)
     path = [point for point in gen_straight_path(g, Point(0, 0), Point(0, 1), 3)]
     self.assertEqual([Point(0, 0), Point(0, 1), Point(0, 2)], path)
+
+class IsInRunTests(TestCase):
+
+  def test_is_in_connected_row(self):
+    g = Grid(3, 3, initial_grid=[[None, None, None],
+                                 [None, None, None],
+                                 ["red", "red", "red"]])
+    self.assertTrue(is_in_row_run(g, Point(2, 1), 3))
+
+    g = Grid(3, 3, initial_grid=[[None, None, None],
+                                 [None, None, None],
+                                 ["red", "red", "black"]])
+    self.assertFalse(is_in_row_run(g, Point(2, 1), 3))

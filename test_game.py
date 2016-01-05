@@ -16,18 +16,6 @@ class GameTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       game.add_disc(0, DiscState.red)
 
-  def test_is_in_connected_row(self):
-    g = Game(initial_grid=Grid(3, 3,
-      initial_grid=[[DiscState.empty, DiscState.empty, DiscState.empty],
-                    [DiscState.empty, DiscState.empty, DiscState.empty],
-                    [DiscState.red, DiscState.red, DiscState.red]]))
-    self.assertTrue(g.is_in_connected_row(Point(2, 1), 3))
-    g = Game(initial_grid=Grid(3, 3,
-      initial_grid=[[DiscState.empty, DiscState.empty, DiscState.empty],
-                    [DiscState.empty, DiscState.empty, DiscState.empty],
-                    [DiscState.red, DiscState.red, DiscState.black]]))
-    self.assertFalse(g.is_in_connected_row(Point(2, 1), 3))
-
   def test_is_in_connected_col(self):
     g = Game(initial_grid=Grid(3, 3,
       initial_grid=[[DiscState.black, DiscState.red, DiscState.empty],
