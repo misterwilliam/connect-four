@@ -18,7 +18,7 @@ class TextualRuntime:
 
   def render(self):
     str_repr = ["Current board state:\n"]
-    str_repr += [" %i " % col_index for col_index in range(self.game.grid.width)]
+    str_repr += [" %i " % col_index for col_index in range(self.game.grid.width)] + ["\n"]
     for row in self.game.grid:
       row_repr = []
       for disc_value in row:
@@ -40,4 +40,7 @@ class TextualRuntime:
     if len(tokens) == 1:
       if tokens[0] == "quit":
         self.state["continue"] = False
+      elif tokens[0].isdigit():
+        col_index = int(tokens[0])
+        new_point = self.game.try_turn(self.game.current_player, col_index)
 
