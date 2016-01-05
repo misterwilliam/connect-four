@@ -37,6 +37,8 @@ class Game(object):
     return self.add_disc(col_index, self.current_player)
 
   def can_add_disc(self, col_index):
+    if col_index >= self.grid.width:
+      return False
     return self.grid[-1][col_index] is DiscState.empty
 
   def add_disc(self, col_index, color):

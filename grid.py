@@ -35,4 +35,4 @@ class Grid:
     return self.grid[point.row][point.col]
 
   def is_inside(self, point):
-    return 0 <= point.row < self.width and 0 <= point.col < self.height
+    return 0 <= point.row < self.height and 0 <= point.col < self.width
