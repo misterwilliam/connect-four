@@ -30,7 +30,9 @@ class Game(object):
     start_state = self.grid.at(start_point)
     if start_state is not DiscState.empty:
       return self.is_in_connected_row(start_point, row_size) or \
-        self.is_in_connected_col(start_point, row_size)
+        self.is_in_connected_col(start_point, row_size) or \
+        self.is_in_connected_diag_down(start_point, row_size) or \
+        self.is_in_connected_diag_up(start_point, row_size)
     else:
       return False
 
