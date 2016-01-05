@@ -22,31 +22,11 @@ class Grid:
   def __getitem__(self, row_index):
     return self.grid[row_index]
 
-  def gen_path_left(self, row_start_index, col_start_index, max_length):
-    for i, j in self._gen_path(row_start_index, col_start_index, 0, -1, max_length):
-      yield i, j
-
-  def gen_path_right(self, row_start_index, col_start_index, max_length):
-    for i, j in self._gen_path(row_start_index, col_start_index, 0, 1, max_length):
-      yield i, j
-
-  def gen_path_up(self, row_start_index, col_start_index, max_length):
-    for i, j in self._gen_path(row_start_index, col_start_index, -1, 0, max_length):
-      yield i, j
-
-  def gen_path_down(self, row_start_index, col_start_index, max_length):
-    for i, j in self._gen_path(row_start_index, col_start_index, 1, 0, max_length):
-      yield i, j
-
-  def _gen_path(self, row_start_index, col_start_index, row_step, col_step, max_length):
-    for i in range(max_length):
-      row_index = row_start_index + row_step * i
-      col_index = col_start_index + col_step * i
-      if 0 <= row_index < self.width and \
-          0 <= col_index < self.height:
-        yield (row_index, col_index)
-      else:
-        break
+  def gen_path(self, start, step, length):
+    for i in range(length):
+      next_point = Point(start.x + step.x * i, start.y + step.y * i)
+      if self.is_inside(next_point):
+        yield next_point
 
   def at(self, point):
     return self.grid[point.x][point.y]
