@@ -18,13 +18,17 @@ class Game(object):
     else:
       self.grid = initial_grid
     self.current_player = DiscState.red
+    self.winner = None
+    self.is_end = False
 
   def try_turn(self, color, col_index):
     added_point = self.try_move(color, col_index)
     if added_point is not None:
       is_connected = self.has_connected_discs(added_point)
       if is_connected:
-        return color
+        self.winner = color
+        self.is_end = True
+        return self.winner
       else:
         self.switch_player()
         return True

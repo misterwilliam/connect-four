@@ -16,6 +16,10 @@ class TextualRuntime:
       self.render()
       self.eval(self.get_input())
 
+    if self.game.winner is not None:
+      self.render()
+      print("The winner is: %s" % self.disc_state_to_player_name(self.game.winner))
+
   def render(self):
     str_repr = ["Current board state:\n"]
     str_repr += [" %i " % col_index for col_index in range(self.game.grid.width)] + ["\n"]
@@ -33,7 +37,10 @@ class TextualRuntime:
     print("".join(str_repr))
 
   def get_input(self):
-    return input("--> ")
+    print("Current player: %s" % self.disc_state_to_player_name(self.game.current_player))
+    command = input("--> ")
+    print("\n")
+    return command
 
   def eval(self, command):
     tokens = command.split()
@@ -43,4 +50,11 @@ class TextualRuntime:
       elif tokens[0].isdigit():
         col_index = int(tokens[0])
         new_point = self.game.try_turn(self.game.current_player, col_index)
+    if self.game.is_end:
+      self.state["continue"] = False
 
+  def disc_state_to_player_name(self, disc_state):
+    if disc_state is DiscState.red:
+      return "O"
+    else:
+      return "X"
