@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-Point = namedtuple('Point', ['x', 'y'])
+Point = namedtuple('Point', ['row', 'col'])
 
 class Grid:
 
@@ -24,18 +24,12 @@ class Grid:
 
   def gen_path(self, start, step, length):
     for i in range(length):
-      next_point = Point(start.x + step.x * i, start.y + step.y * i)
+      next_point = Point(start.row + step.row * i, start.col + step.col * i)
       if self.is_inside(next_point):
         yield next_point
 
   def at(self, point):
-    return self.grid[point.x][point.y]
+    return self.grid[point.row][point.col]
 
   def is_inside(self, point):
-    return 0 <= point.x < self.width and 0 <= point.y < self.height
-
-  def visit(self, start, step, length):
-    for i in range(length):
-      next_point = Point(start.x + step.x * i, start.y + step.y * i)
-      if self.is_inside(next_point):
-        yield next_point
+    return 0 <= point.row < self.width and 0 <= point.col < self.height
