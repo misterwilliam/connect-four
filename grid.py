@@ -25,12 +25,6 @@ class Grid:
   def __reversed__(self):
     return reversed(self.grid)
 
-  def gen_path(self, start, step, length):
-    for i in range(length):
-      next_point = Point(start.row + step.row * i, start.col + step.col * i)
-      if self.is_inside(next_point):
-        yield next_point
-
   def at(self, point):
     return self.grid[point.row][point.col]
 
