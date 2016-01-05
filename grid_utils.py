@@ -33,3 +33,19 @@ def is_in_row_run(grid, point, length):
                                                 length - 1),
                               start_state)
   return num_matches_left + num_matches_right >= length - 1
+
+def is_in_col_run(grid, point, length):
+  start_state = grid.at(point)
+  num_matches_down = run_len(grid,
+                             gen_straight_path(grid,
+                                               Point(point.row - 1, point.col),
+                                               Point(-1, 0),
+                                               length - 1),
+    start_state)
+  num_matches_up = run_len(grid,
+                           gen_straight_path(grid,
+                                             Point(point.row + 1, point.col),
+                                             Point(1, 0),
+                                             length - 1),
+    start_state)
+  return num_matches_down + num_matches_up >= length - 1

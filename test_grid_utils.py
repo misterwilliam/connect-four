@@ -38,7 +38,7 @@ class GenStraightPath(TestCase):
 
 class IsInRunTests(TestCase):
 
-  def test_is_in_connected_row(self):
+  def test_is_in_row_run(self):
     g = Grid(3, 3, initial_grid=[[None, None, None],
                                  [None, None, None],
                                  ["red", "red", "red"]])
@@ -48,3 +48,14 @@ class IsInRunTests(TestCase):
                                  [None, None, None],
                                  ["red", "red", "black"]])
     self.assertFalse(is_in_row_run(g, Point(2, 1), 3))
+
+  def test_is_in_col_run(self):
+    g = Grid(3, 3, initial_grid=[[None, "red", None],
+                                 [None, "red", None],
+                                 ["black", "red", "red"]])
+    self.assertTrue(is_in_col_run(g, Point(2, 1), 3))
+
+    g = Grid(3, 3, initial_grid=[[None, "red", None],
+                                 [None, "red", None],
+                                 ["red", "black", "black"]])
+    self.assertFalse(is_in_col_run(g, Point(2, 1), 3))
