@@ -11,6 +11,15 @@ class GridTests(unittest.TestCase):
                       [None, None]],
                      g.grid)
 
+  def test_init_with_initial_grid(self):
+    g = grid.Grid(3, 2, initial_grid=[["RED", "RED"],
+                                      ["RED", "RED"],
+                                      ["RED", "RED"]])
+    self.assertEqual([["RED", "RED"],
+                      ["RED", "RED"],
+                      ["RED", "RED"]],
+                     g.grid)
+
   def test_set(self):
     g = grid.Grid(3, 2)
     g[0][1] = "RED"
