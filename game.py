@@ -67,8 +67,8 @@ class Game(object):
     start_state = self.grid.at(start_point)
     if start_state is not DiscState.empty:
       return grid_utils.is_in_row_run(self.grid, start_point, row_size) or \
-        is_in_col_run(start_point, row_size) or \
-        self.is_in_connected_diag_down(start_point, row_size) or \
-        self.is_in_connected_diag_up(start_point, row_size)
+        grid_utils.is_in_col_run(self.grid, start_point, row_size) or \
+        grid_utils.is_in_diag_down_run(self.grid, start_point, row_size) or \
+        grid_utils.is_in_diag_up_run(self.grid, start_point, row_size)
     else:
       return False
