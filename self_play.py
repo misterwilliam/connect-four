@@ -6,6 +6,7 @@ class SelfPlay:
 
   def __init__(self, game):
     self.game = game
+    self.log = []
 
   def play(self):
     while self.game.winner is None:
@@ -13,6 +14,7 @@ class SelfPlay:
       if self.game.can_add_disc(col_index):
         success = self.game.try_turn(self.game.current_player, col_index)
         assert success
+        self.log.append(col_index)
     self.render_board()
     print("Winner is: %s" % self.disc_state_to_player_name(self.game.winner))
 
