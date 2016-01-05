@@ -26,9 +26,9 @@ class Game(object):
   def try_turn(self, color, col_index):
     added_point = self.try_move(color, col_index)
     if added_point is not None:
-      is_connected = self.has_connected_discs(added_point)
-      if is_connected:
-        self.winner = color
+      winner = self.get_winner(added_point)
+      if winner:
+        self.winner = winner
         self.is_end = True
         return self.winner
       else:
@@ -63,12 +63,12 @@ class Game(object):
     else:
       raise ValueError("column %i is full" % col_index)
 
-  def has_connected_discs(self, start_point, row_size=4):
+  def get_winner(self, start_point, row_size=4):
     start_state = self.grid.at(start_point)
     if start_state is not DiscState.empty:
-      return grid_utils.is_in_row_run(self.grid, start_point, row_size) or \
-        grid_utils.is_in_col_run(self.grid, start_point, row_size) or \
-        grid_utils.is_in_diag_down_run(self.grid, start_point, row_size) or \
-        grid_utils.is_in_diag_up_run(self.grid, start_point, row_size)
-    else:
-      return False
+      if grid_utils.is_in_row_run(self.grid, start_point, row_size) or \
+          grid_utils.is_in_col_run(self.grid, start_point, row_size) or \
+          grid_utils.is_in_diag_down_run(self.grid, start_point, row_size) or \
+          grid_utils.is_in_diag_up_run(self.grid, start_point, row_size):
+          return start_state
+    return None
