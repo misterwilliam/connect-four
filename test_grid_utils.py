@@ -59,3 +59,25 @@ class IsInRunTests(TestCase):
                                  [None, "red", None],
                                  ["red", "black", "black"]])
     self.assertFalse(is_in_col_run(g, Point(2, 1), 3))
+
+  def test_is_in_connected_diag_down(self):
+    g = Grid(3, 3, initial_grid=[["red", "black", None],
+                                 [None, "red", None],
+                                 ["black", "red", "red"]])
+    self.assertTrue(is_in_diag_down_run(g, Point(1, 1), 3))
+
+    g = Grid(3, 3, initial_grid=[["red", "red", None],
+                                 [None, "red", None],
+                                 ["red", "black", "black"]])
+    self.assertFalse(is_in_diag_down_run(g, Point(1, 1), 3))
+
+  def test_is_in_connected_diag_up(self):
+    g = Grid(3, 3, initial_grid=[[None, "red", "red"],
+                                 [None, "red", None],
+                                 ["red", "black", "red"]])
+    self.assertTrue(is_in_diag_up_run(g, Point(1, 1), 3))
+
+    g = Grid(3, 3, initial_grid=[[None, "red", None],
+                                 [None, "red", None],
+                                 ["red", "black", "black"]])
+    self.assertFalse(is_in_diag_up_run(g, Point(1, 1), 3))
