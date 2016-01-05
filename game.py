@@ -26,6 +26,7 @@ class Game(object):
       if is_connected:
         return color
       else:
+        self.switch_player()
         return True
     return False
 
@@ -35,6 +36,12 @@ class Game(object):
     if not self.can_add_disc(col_index):
       return None
     return self.add_disc(col_index, self.current_player)
+
+  def switch_player(self):
+    if self.current_player is DiscState.red:
+      self.current_player = DiscState.black
+    else:
+      self.current_player = DiscState.red
 
   def can_add_disc(self, col_index):
     if col_index >= self.grid.width:
