@@ -17,11 +17,33 @@ class Game(object):
                        initial_value=DiscState.empty)
     else:
       self.grid = initial_grid
+    self.current_player = DiscState.red
+
+  def try_turn(self, color, col_index):
+    added_point = self.try_move(color, col_index)
+    if added_point is not None:
+      is_connected = self.has_connected_discs(added_point)
+      if is_connected:
+        return color
+      else:
+        return True
+    return False
+
+  def try_move(self, color, col_index):
+    if self.current_player is not color:
+      return None
+    if not self.can_add_disc(col_index):
+      return None
+    return self.add_disc(col_index, self.current_player)
+
+  def can_add_disc(self, col_index):
+    return self.grid[-1][col_index] is DiscState.empty
 
   def add_disc(self, col_index, color):
     for row_index in range(self.grid.height):
       if self.grid[row_index][col_index] is DiscState.empty:
         self.grid[row_index][col_index] = color
+        return Point(row_index, col_index)
         break
     else:
       raise ValueError("column %i is full" % col_index)
