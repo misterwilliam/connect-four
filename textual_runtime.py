@@ -19,7 +19,7 @@ class TextualRuntime:
   def render(self):
     str_repr = ["Current board state:\n"]
     str_repr += [" %i " % col_index for col_index in range(self.game.grid.width)] + ["\n"]
-    for row in self.game.grid:
+    for row in reversed(self.game.grid):
       row_repr = []
       for disc_value in row:
         if disc_value is DiscState.empty:

@@ -22,6 +22,9 @@ class Grid:
   def __getitem__(self, row_index):
     return self.grid[row_index]
 
+  def __reversed__(self):
+    return reversed(self.grid)
+
   def gen_path(self, start, step, length):
     for i in range(length):
       next_point = Point(start.row + step.row * i, start.col + step.col * i)
