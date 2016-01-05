@@ -30,7 +30,7 @@ class Game(object):
       if winner:
         self.winner = winner
         self.is_end = True
-        return self.winner
+        return True
       else:
         self.switch_player()
         return True

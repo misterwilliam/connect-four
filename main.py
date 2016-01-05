@@ -1,7 +1,7 @@
 from game import Game
-from textual_runtime import TextualRuntime
+from self_play import SelfPlay
 
 g = Game()
 
-runtime = TextualRuntime(g)
-runtime.start()
+runtime = SelfPlay(g)
+runtime.play()

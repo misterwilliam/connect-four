@@ -49,7 +49,7 @@ class TextualRuntime:
         self.state["continue"] = False
       elif tokens[0].isdigit():
         col_index = int(tokens[0])
-        new_point = self.game.try_turn(self.game.current_player, col_index)
+        self.game.try_turn(self.game.current_player, col_index)
     if self.game.is_end:
       self.state["continue"] = False
 
