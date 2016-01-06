@@ -4,9 +4,10 @@ from game import Game, DiscState
 
 class SelfPlay:
 
-  def __init__(self, game):
+  def __init__(self, game, game_stats):
     self.game = game
     self.log = []
+    self.game_stats = game_stats
 
   def play(self):
     while self.game.winner is None:
