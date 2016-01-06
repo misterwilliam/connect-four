@@ -18,13 +18,15 @@ game_stats_tree.print_stats(game_stats)
 runtime = SelfPlay(game_stats)
 
 wins = 0
-num_rounds = 100
-for _ in range(num_rounds):
+num_rounds = 10000
+for i in range(num_rounds):
   g = Game()
   runtime.play(g)
   game_stats_tree.update_game_stats(game_stats, runtime.log, g.winner)
   if g.winner is DiscState.red:
     wins += 1
+  if i % 100 == 0 and i > 0:
+    print("Wins: %f" % (wins / i))
 
 print("Wins: %f" % (wins / num_rounds))
 
