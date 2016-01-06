@@ -1,7 +1,7 @@
 import os
 import pickle
 
-from game import Game
+from game import Game, DiscState
 from self_play import SelfPlay
 
 import game_stats_tree
@@ -15,12 +15,18 @@ else:
 
 game_stats_tree.print_stats(game_stats)
 
-g = Game()
+runtime = SelfPlay(game_stats)
 
-runtime = SelfPlay(g, game_stats)
-runtime.play()
+wins = 0
+num_rounds = 100
+for _ in range(num_rounds):
+  g = Game()
+  runtime.play(g)
+  game_stats_tree.update_game_stats(game_stats, runtime.log, g.winner)
+  if g.winner is DiscState.red:
+    wins += 1
 
-game_stats_tree.update_game_stats(game_stats, runtime.log, g.winner)
+print("Wins: %f" % (wins / num_rounds))
 
 with open(pickle_filename, "wb") as pickle_file:
   pickle.dump(game_stats, pickle_file)

@@ -9,6 +9,8 @@ class Node:
     self.data = {} if data is None else data
 
 def update_game_stats(root, log, winner):
+  if winner is None:
+    return
   current_node = root
   for col in log:
     if col in current_node.children:
@@ -26,5 +28,5 @@ def print_stats(root):
   for key, child in root.children.items():
     red = child.data.get(DiscState.red, 0)
     black = child.data.get(DiscState.black, 0)
-    str_repr.append("%i %i:%i" % (key, red, black))
-  print(" ".join(str_repr))
+    str_repr.append("%i %i:%i\n" % (key, red, black))
+  print("".join(str_repr) + "\n")

@@ -32,7 +32,11 @@ class Game(object):
         self.is_end = True
         return True
       else:
-        self.switch_player()
+        if not self.is_board_full():
+          self.switch_player()
+        else:
+          # Tie game
+          self.is_end = True
         return True
     return False
 
@@ -48,6 +52,12 @@ class Game(object):
       self.current_player = DiscState.black
     else:
       self.current_player = DiscState.red
+
+  def is_board_full(self):
+    for col_index in range(self.grid.width):
+      if self.can_add_disc(col_index):
+        return False
+    return True
 
   def can_add_disc(self, col_index):
     if col_index >= self.grid.width:
@@ -71,3 +81,19 @@ class Game(object):
         grid_utils.is_in_diag_up_run(self.grid, last_move, row_size):
         return current_player
     return None
+
+  def render_board(self):
+    str_repr = ["Current board state:\n"]
+    str_repr += [" %i " % col_index for col_index in range(self.grid.width)] + ["\n"]
+    for row in reversed(self.grid):
+      row_repr = []
+      for disc_value in row:
+        if disc_value is DiscState.empty:
+          row_repr.append("| |")
+        elif disc_value is DiscState.red:
+          row_repr.append("|O|")
+        else:  # disc_value is black
+          row_repr.append("|X|")
+      row_repr.append("\n")
+      str_repr += row_repr
+    print("".join(str_repr))
