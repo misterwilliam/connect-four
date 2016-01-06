@@ -25,7 +25,7 @@ for i in range(num_rounds):
   game_stats_tree.update_game_stats(game_stats, runtime.log, g.winner)
   if g.winner is DiscState.red:
     wins += 1
-  if i % 100 == 0 and i > 0:
+  if i % 500 == 0 and i > 0:
     print("Wins: %f" % (wins / i))
 
 print("Wins: %f" % (wins / num_rounds))
