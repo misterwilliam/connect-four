@@ -2,6 +2,7 @@ import os
 import pickle
 
 from game import Game, DiscState
+from move_chooser import MoveChooser
 from self_play import SelfPlay
 
 import game_stats_tree
@@ -13,12 +14,13 @@ if os.path.isfile(pickle_filename):
 else:
   game_stats = game_stats_tree.Node()
 
+move_chooser = MoveChooser(game_stats)
 game_stats_tree.print_stats(game_stats)
 
-runtime = SelfPlay(game_stats)
+runtime = SelfPlay(move_chooser)
 
 wins = 0
-num_rounds = 10000
+num_rounds = 100
 for i in range(num_rounds):
   g = Game()
   runtime.play(g)

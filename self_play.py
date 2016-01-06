@@ -4,13 +4,13 @@ from game import Game, DiscState
 
 class SelfPlay:
 
-  def __init__(self, game_stats):
-    self.game_stats = game_stats
+  def __init__(self, move_chooser):
+    self.move_chooser = move_chooser
 
   def play(self, game):
     self.game = game
-    self.current_node = self.game_stats
     self.log = []
+    self.move_chooser.restart()
 
     num_fails = 0
     while not self.game.is_end:
@@ -19,10 +19,7 @@ class SelfPlay:
         success = self.game.try_turn(self.game.current_player, col_index)
         assert success
         self.log.append(col_index)
-        if self.current_node is not None and col_index in self.current_node.children:
-          self.current_node = self.current_node.children[col_index]
-        else:
-          self.current_node = None
+        self.move_chooser.report_move(col_index)
         num_fails = 0
       else:
         num_fails += 1
@@ -31,7 +28,6 @@ class SelfPlay:
           self.game.render_board()
           raise Error("Stucking searching for move")
 
-
   def calc_move(self, current_player):
     if self.game.current_player is DiscState.red:
       return self.find_best_move(self.game.current_player)
@@ -39,18 +35,6 @@ class SelfPlay:
       return random.randint(0, self.game.grid.width)
 
   def find_best_move(self, color):
-    choose_random = random.random() > 0.5
-    if choose_random or \
-         self.current_node is None or \
-         len(self.current_node.children) == 0:
-      return random.randint(0, self.game.grid.width)
-    else:
-      best_move_score, best_move = 0, -1
-      for col_index, child in self.current_node.children.items():
-        wins = child.data.get(color, 0)
-        total = sum(child.data.values())
-        if wins / total >= best_move_score:
-          best_move = col_index
-          best_move_score = wins / total
-      assert best_move != -1
-      return best_move
+    return self.move_chooser.request_move(
+      self.game.current_player,
+      [move for move in range(self.game.grid.width)])
