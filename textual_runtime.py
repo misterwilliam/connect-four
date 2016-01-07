@@ -2,8 +2,9 @@
 # through a text based interface.
 
 from game import DiscState
+from runtime import Runtime
 
-class TextualRuntime:
+class TextualRuntime(Runtime):
 
   def __init__(self, game, move_chooser):
     self.game = game
