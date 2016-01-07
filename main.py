@@ -15,13 +15,13 @@ if os.path.isfile(pickle_filename):
 else:
   game_stats = game_stats_tree.Node()
 
-move_chooser = MoveChooser(game_stats)
+move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.9)
 game_stats_tree.print_stats(game_stats)
 
 runtime = SelfPlay(move_chooser)
 
 wins = 0
-num_rounds = 100
+num_rounds = 100000
 for i in range(num_rounds):
   g = Game()
   runtime.play(g)
@@ -29,9 +29,8 @@ for i in range(num_rounds):
   if g.winner is DiscState.red:
     wins += 1
   if i % 500 == 0 and i > 0:
-    print("Wins: %f" % (wins / i))
-
-print("Wins: %f" % (wins / num_rounds))
+    print("Runs: %i" % i)
+print("Runs: %i" % num_rounds)
 
 with open(pickle_filename, "wb") as pickle_file:
   pickle.dump(game_stats, pickle_file)
@@ -39,5 +38,5 @@ with open(pickle_filename, "wb") as pickle_file:
 PLAY = True
 if PLAY:
   g = Game()
-  runtime = TextualRuntime(g, BestKnownMoveChooser(game_stats))
+  runtime = TextualRuntime(g, BestKnownMoveChooser(game_stats, verbose=True))
   runtime.start()
