@@ -37,7 +37,9 @@ class SelfPlay(Runtime):
 
     num_fails = 0
     while not self.game.is_end:
-      col_index = self.calc_move(self.game.current_player)
+      col_index = self.move_chooser.request_move(
+        self.game.current_player,
+       [move for move in range(self.game.grid.width)])
       if self.game.can_add_disc(col_index):
         success = self.game.try_turn(self.game.current_player, col_index)
         assert success
@@ -52,11 +54,3 @@ class SelfPlay(Runtime):
           raise Error("Stucking searching for move")
 
     return self.game.winner
-
-  def calc_move(self, current_player):
-    return self.find_best_move(self.game.current_player)
-
-  def find_best_move(self, color):
-    return self.move_chooser.request_move(
-      self.game.current_player,
-      [move for move in range(self.game.grid.width)])
