@@ -45,7 +45,7 @@ def train(models, num_iters):
     move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.7)
     game_stats_tree.print_stats(game_stats)
 
-    runtime = SelfPlay(lambda: Game(), move_chooser)
+    runtime = SelfPlay(Game(), move_chooser)
 
     wins = 0
     for i in range(num_iters):

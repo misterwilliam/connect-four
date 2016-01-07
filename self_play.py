@@ -5,15 +5,15 @@ from runtime import Runtime
 
 class SelfPlay(Runtime):
 
-  def __init__(self, game_factory, move_chooser):
-    super().__init__(game_factory, move_chooser)
+  def __init__(self, game, move_chooser):
+    super().__init__(game, move_chooser)
 
   def start(self, num_iterations):
     for i in range(num_iterations):
       pass
 
   def play(self):
-    self.game = self.game_factory()
+    self.game.restart()
     self.log = []
     self.move_chooser.restart()
 
