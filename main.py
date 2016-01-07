@@ -2,8 +2,9 @@ import os
 import pickle
 
 from game import Game, DiscState
-from move_chooser import MoveChooser
+from move_chooser import MoveChooser, BestKnownMoveChooser
 from self_play import SelfPlay
+from textual_runtime import TextualRuntime
 
 import game_stats_tree
 
@@ -34,3 +35,9 @@ print("Wins: %f" % (wins / num_rounds))
 
 with open(pickle_filename, "wb") as pickle_file:
   pickle.dump(game_stats, pickle_file)
+
+PLAY = True
+if PLAY:
+  g = Game()
+  runtime = TextualRuntime(g, BestKnownMoveChooser(game_stats))
+  runtime.start()

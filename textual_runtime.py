@@ -5,20 +5,30 @@ from game import DiscState
 
 class TextualRuntime:
 
-  def __init__(self, game):
+  def __init__(self, game, move_chooser):
     self.game = game
+    self.move_chooser = move_chooser
     self.state = {
       "continue": True
     }
 
   def start(self):
     while self.state["continue"]:
-      self.render()
-      self.eval(self.get_input())
+      while not self.game.is_end and self.state["continue"]:
+        if self.game.current_player is DiscState.red:
+          move = self.move_chooser.request_move(self.game.current_player,
+                                                [move for move in range(self.game.grid.width)])
+          success = self.game.try_turn(self.game.current_player, move)
+          if success:
+            self.move_chooser.report_move(move)
+        else:
+          self.render()
+          self.eval(self.get_input())
 
-    if self.game.winner is not None:
       self.render()
       print("The winner is: %s" % self.disc_state_to_player_name(self.game.winner))
+      self.game.restart()
+      self.move_chooser.restart()
 
   def render(self):
     str_repr = ["Current board state:\n"]
@@ -49,9 +59,9 @@ class TextualRuntime:
         self.state["continue"] = False
       elif tokens[0].isdigit():
         col_index = int(tokens[0])
-        self.game.try_turn(self.game.current_player, col_index)
-    if self.game.is_end:
-      self.state["continue"] = False
+        success = self.game.try_turn(self.game.current_player, col_index)
+        if success:
+          self.move_chooser.report_move(col_index)
 
   def disc_state_to_player_name(self, disc_state):
     if disc_state is DiscState.red:

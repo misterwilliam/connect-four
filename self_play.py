@@ -29,10 +29,7 @@ class SelfPlay:
           raise Error("Stucking searching for move")
 
   def calc_move(self, current_player):
-    if self.game.current_player is DiscState.red:
-      return self.find_best_move(self.game.current_player)
-    else:
-      return random.randint(0, self.game.grid.width)
+    return self.find_best_move(self.game.current_player)
 
   def find_best_move(self, color):
     return self.move_chooser.request_move(

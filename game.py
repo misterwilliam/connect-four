@@ -13,6 +13,9 @@ class DiscState(Enum):
 class Game(object):
 
   def __init__(self, initial_grid=None):
+    self.restart(initial_grid)
+
+  def restart(self, initial_grid=None):
     if initial_grid is None:
       self.grid = Grid(6, # Rows
                        7, # Cols
