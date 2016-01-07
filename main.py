@@ -45,28 +45,12 @@ def train(models, num_iters):
     move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.7)
     game_stats_tree.print_stats(game_stats)
 
-    runtime = SelfPlay(Game(), move_chooser)
-
-    wins = 0
-    for i in range(num_iters):
-      winner = runtime.play()
-      game_stats_tree.update_game_stats(game_stats, runtime.log, winner)
-      if winner is DiscState.red:
-        wins += 1
-      if i % 500 == 0 and i > 0:
-        print("Runs: %i 1st player win %%: %f" % (i, wins / i))
-      if i % 100000 == 0 and i > 0:
-        with open(model_path, "wb") as pickle_file:
-          pickle.dump(game_stats, pickle_file)
-    print("Runs: %i" % num_iters)
-
-    with open(model_path, "wb") as pickle_file:
-      pickle.dump(game_stats, pickle_file)
+    runtime = SelfPlay(Game(), move_chooser, game_stats, model_path)
+    runtime.start(num_iters)
 
 def play(path_to_model):
   model = get_model(path_to_model)
-  g = Game()
-  runtime = TextualRuntime(g, BestKnownMoveChooser(model, exploitation_rate=1.0,
+  runtime = TextualRuntime(Game(), BestKnownMoveChooser(model, exploitation_rate=1.0,
     verbose=True))
   runtime.start()
 
