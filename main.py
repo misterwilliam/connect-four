@@ -45,14 +45,13 @@ def train(models, num_iters):
     move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.7)
     game_stats_tree.print_stats(game_stats)
 
-    runtime = SelfPlay(move_chooser)
+    runtime = SelfPlay(lambda: Game(), move_chooser)
 
     wins = 0
     for i in range(num_iters):
-      g = Game()
-      runtime.play(g)
-      game_stats_tree.update_game_stats(game_stats, runtime.log, g.winner)
-      if g.winner is DiscState.red:
+      winner = runtime.play()
+      game_stats_tree.update_game_stats(game_stats, runtime.log, winner)
+      if winner is DiscState.red:
         wins += 1
       if i % 500 == 0 and i > 0:
         print("Runs: %i 1st player win %%: %f" % (i, wins / i))

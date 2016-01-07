@@ -1,14 +1,19 @@
 import random
 
 from game import Game, DiscState
+from runtime import Runtime
 
-class SelfPlay:
+class SelfPlay(Runtime):
 
-  def __init__(self, move_chooser):
-    self.move_chooser = move_chooser
+  def __init__(self, game_factory, move_chooser):
+    super().__init__(game_factory, move_chooser)
 
-  def play(self, game):
-    self.game = game
+  def start(self, num_iterations):
+    for i in range(num_iterations):
+      pass
+
+  def play(self):
+    self.game = self.game_factory()
     self.log = []
     self.move_chooser.restart()
 
@@ -27,6 +32,8 @@ class SelfPlay:
           print(col_index)
           self.game.render_board()
           raise Error("Stucking searching for move")
+
+    return self.game.winner
 
   def calc_move(self, current_player):
     return self.find_best_move(self.game.current_player)
