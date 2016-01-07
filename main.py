@@ -30,15 +30,17 @@ compare_parser.add_argument("--iters", nargs=1, type=int, default=100,
 play_parser = command_parser.add_parser("play", help="Play against a model")
 play_parser.add_argument("model", nargs=1, help="Models to play against")
 
-
+def get_model(path_to_model):
+  if os.path.isfile(path_to_model):
+    with open(path_to_model, "rb") as pickle_file:
+      game_stats = pickle.load(pickle_file)
+  else:
+    game_stats = game_stats_tree.Node()
+  return game_stats
 
 def train(models, num_iters):
   for model_path in models:
-    if os.path.isfile(model_path):
-      with open(model_path, "rb") as pickle_file:
-        game_stats = pickle.load(pickle_file)
-    else:
-      game_stats = game_stats_tree.Node()
+    game_stats = get_model(model_path)
 
     move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.7)
     game_stats_tree.print_stats(game_stats)
@@ -62,21 +64,19 @@ def train(models, num_iters):
     with open(model_path, "wb") as pickle_file:
       pickle.dump(game_stats, pickle_file)
 
+def play(path_to_model):
+  model = get_model(path_to_model)
+  g = Game()
+  runtime = TextualRuntime(g, BestKnownMoveChooser(model, exploitation_rate=1.0,
+    verbose=True))
+  runtime.start()
+
 def main():
   args = parser.parse_args()
   if args.command == "train":
     train(args.models, args.iters)
-
-
-
-
-
-# PLAY = True
-# if PLAY:
-#   g = Game()
-#   runtime = TextualRuntime(g, BestKnownMoveChooser(game_stats, exploitation_rate=1.0,
-#     verbose=True))
-#   runtime.start()
+  elif args.command == "play":
+    play(args.model[0])
 
 if __name__ == "__main__":
   main()
