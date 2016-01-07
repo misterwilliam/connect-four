@@ -29,7 +29,7 @@ for i in range(num_rounds):
   if g.winner is DiscState.red:
     wins += 1
   if i % 500 == 0 and i > 0:
-    print("Runs: %i 1st player win %: %f" % (i, wins / i))
+    print("Runs: %i 1st player win %%: %f" % (i, wins / i))
   if i % 100000 == 0 and i > 0:
     with open(pickle_filename, "wb") as pickle_file:
       pickle.dump(game_stats, pickle_file)
