@@ -1,6 +1,6 @@
 import random
 
-class MoveChooser:
+class UniformMoveChooser:
 
   def __init__(self, game_stats_tree, exploitation_rate=0.9):
     self.game_stats_tree = game_stats_tree

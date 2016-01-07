@@ -3,7 +3,7 @@ import os
 import pickle
 
 from game import Game, DiscState
-from move_chooser import MoveChooser, BestKnownMoveChooser
+from move_chooser import BestKnownMoveChooser
 from self_play import SelfPlay
 from textual_runtime import TextualRuntime
 
