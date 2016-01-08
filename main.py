@@ -18,14 +18,16 @@ command_parser = parser.add_subparsers(dest="command")
 # Configure train command
 train_parser = command_parser.add_parser("train", help="Train models")
 train_parser.add_argument("models", nargs="+", help="List of models to train")
-train_parser.add_argument("--iters", type=int, default=1000,
+train_parser.add_argument("--iters", type=int, default=100000,
+  help="Number of iterations used to train each model.")
+train_parser.add_argument("--exploitation_rate", type=float, default=0.65,
   help="Number of iterations used to train each model.")
 
 # Configure compare command
 compare_parser = command_parser.add_parser("compare",
   help="Compare performance of models")
 compare_parser.add_argument("models", nargs=2, help="Models to compare")
-compare_parser.add_argument("--iters", type=int, default=300,
+compare_parser.add_argument("--iters", type=int, default=500,
   help="Number of play throughs used to compare models.")
 
 # Configure play command
@@ -40,11 +42,11 @@ def get_model(path_to_model):
     game_stats = game_stats_tree.Node()
   return game_stats
 
-def train(models, num_iters):
+def train(models, num_iters, exploitation_rate):
   for model_path in models:
     game_stats = get_model(model_path)
 
-    move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate=0.7)
+    move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate)
     game_stats_tree.print_stats(game_stats)
 
     runtime = TrainRuntime(Game(), move_chooser, game_stats, model_path)
@@ -55,7 +57,7 @@ def compare(model_a, model_b, num_iters):
   move_chooser_b = BestKnownMoveChooser(get_model(model_b))
   runtime = CompareRuntime(Game(), move_chooser_a, move_chooser_b, num_iters)
   a_wins, b_wins = runtime.start()
-  print("Win Rates")
+  print("Win Rates (iters: %i)" % num_iters)
   print("%s: %.2f%%" % (model_a, a_wins * 100 / num_iters))
   print("%s: %.2f%%" % (model_b, b_wins * 100 / num_iters))
 
@@ -67,7 +69,7 @@ def play(path_to_model):
 def main():
   args = parser.parse_args()
   if args.command == "train":
-    train(args.models, args.iters)
+    train(args.models, args.iters, args.exploitation_rate)
   elif args.command == "play":
     play(args.model[0])
   elif args.command == "compare":
