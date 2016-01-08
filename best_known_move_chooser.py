@@ -1,5 +1,6 @@
 import random
 
+import game_stats_tree
 from move_chooser import MoveChooser
 
 class BestKnownMoveChooser(MoveChooser):
@@ -26,11 +27,12 @@ class BestKnownMoveChooser(MoveChooser):
       selected_move = self.select_move(scored_moves)
       if self.verbose:
         data = [
-          "%i: %.0f%% %i" % (move, score * 100, total)
+          "%i: %.0f%% (%i)" % (move, score * 100, total)
           for move, score, total in scored_moves
         ]
         print("Selected %s" % selected_move)
-        print("Move stats: (total %i)" % self.get_plays_from_node(self.current_node))
+        print("Move stats: (total %i)" %
+          game_stats_tree.get_num_plays_from_node(self.current_node))
         print("%s" % " ".join(data))
       return selected_move
 
@@ -48,12 +50,6 @@ class BestKnownMoveChooser(MoveChooser):
       total = sum(child.data.values())
       move_scores.append((move, num_wins / total, total))
     return move_scores
-
-  def get_plays_from_node(self, node):
-    total = 0
-    for move, child in node.children.items():
-      total += sum(child.data.values())
-    return total
 
   def select_move(self, scored_moves):
     scored_moves = list(scored_moves)

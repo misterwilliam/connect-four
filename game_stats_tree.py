@@ -21,6 +21,12 @@ def update_game_stats(root, log, winner):
       current_node.children[col] = child
       current_node = child
 
+def get_num_plays_from_node(node):
+  total = 0
+  for move, child in node.children.items():
+    total += sum(child.data.values())
+  return total
+
 def print_stats(root):
   str_repr = []
   for key, child in root.children.items():
