@@ -3,7 +3,7 @@ import os
 import pickle
 
 from game import Game, DiscState
-from move_chooser import BestKnownMoveChooser
+from move_chooser import BestKnownMoveChooser, UniformMoveChooser
 
 from compare_runtime import CompareRuntime
 from textual_runtime import TextualRuntime
@@ -22,6 +22,7 @@ train_parser.add_argument("--iters", type=int, default=100000,
   help="Number of iterations used to train each model.")
 train_parser.add_argument("--exploitation_rate", type=float, default=0.65,
   help="Number of iterations used to train each model.")
+train_parser.add_argument("--method", choices=["best", "uniform"], default="best")
 
 # Configure compare command
 compare_parser = command_parser.add_parser("compare",
@@ -42,11 +43,14 @@ def get_model(path_to_model):
     game_stats = game_stats_tree.Node()
   return game_stats
 
-def train(models, num_iters, exploitation_rate):
+def train(models, num_iters, exploitation_rate, method):
   for model_path in models:
     game_stats = get_model(model_path)
 
-    move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate)
+    if method == "best":
+      move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate)
+    elif method == "uniform":
+      move_chooser = UniformMoveChooser(game_stats, exploitation_rate)
     game_stats_tree.print_stats(game_stats)
 
     runtime = TrainRuntime(Game(), move_chooser, game_stats, model_path)
@@ -69,7 +73,7 @@ def play(path_to_model):
 def main():
   args = parser.parse_args()
   if args.command == "train":
-    train(args.models, args.iters, args.exploitation_rate)
+    train(args.models, args.iters, args.exploitation_rate, args.method)
   elif args.command == "play":
     play(args.model[0])
   elif args.command == "compare":
