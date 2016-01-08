@@ -49,7 +49,7 @@ class UniformMoveChooser:
 
 class BestKnownMoveChooser:
 
-  def __init__(self, game_stats_tree, exploitation_rate=0.9, verbose=False):
+  def __init__(self, game_stats_tree, exploitation_rate=1.0, verbose=False):
     self.game_stats_tree = game_stats_tree
     self.current_node = game_stats_tree
     self.exploitation_rate = exploitation_rate

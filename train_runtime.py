@@ -6,7 +6,7 @@ from runtime import Runtime
 
 import game_stats_tree
 
-class SelfPlay(Runtime):
+class TrainRuntime(Runtime):
 
   def __init__(self, game, move_chooser, model, model_path):
     super().__init__(game, move_chooser)
