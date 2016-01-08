@@ -39,6 +39,7 @@ class TrainRuntime(Runtime):
     while not self.game.is_end:
       col_index = self.move_chooser.request_move(
         self.game.current_player,
+        self.game.grid,
        [move for move in range(self.game.grid.width)])
       if self.game.can_add_disc(col_index):
         success = self.game.try_turn(self.game.current_player, col_index)

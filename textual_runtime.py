@@ -50,6 +50,7 @@ class TextualRuntime(Runtime):
   def get_input(self):
     print("Current player: %s" % self.disc_state_to_player_name(self.game.current_player))
     self.move_chooser.request_move(self.game.current_player,
+                                   self.game.grid,
                                    [move for move in range(self.game.grid.width)])
     command = input("--> ")
     print("\n")

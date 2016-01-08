@@ -1,6 +1,27 @@
+import abc
 import random
 
-class UniformMoveChooser:
+class MoveChooser(metaclass=abc.ABCMeta):
+  """Abstract interface for a move chooser.
+
+  A MoveChooser is used by a Runtime to automatically choose moves. To initialize the
+  state of a MoveChooser, the runtime will call restart(). Then as moves are selected the
+  Runtime will call report_move(). When the Runtime wants the MoveChooser to select a
+  move, it will call request_move()."""
+
+  @abc.abstractmethod
+  def report_move(self, move):
+    pass
+
+  @abc.abstractmethod
+  def request_move(self, current_player, grid, possible_moves):
+    pass
+
+  @abc.abstractmethod
+  def restart(self):
+    pass
+
+class UniformMoveChooser(MoveChooser):
 
   def __init__(self, game_stats_tree, exploitation_rate=0.9):
     self.game_stats_tree = game_stats_tree
@@ -10,7 +31,7 @@ class UniformMoveChooser:
   def restart(self):
     self.current_node = self.game_stats_tree
 
-  def request_move(self, current_player, possible_moves):
+  def request_move(self, current_player, grid, possible_moves):
     choose_random = random.random() > self.exploitation_rate
     if choose_random or \
          self.current_node is None or \
@@ -47,7 +68,7 @@ class UniformMoveChooser:
       assert False
 
 
-class BestKnownMoveChooser:
+class BestKnownMoveChooser(MoveChooser):
 
   def __init__(self, game_stats_tree, exploitation_rate=1.0, verbose=False):
     self.game_stats_tree = game_stats_tree
@@ -58,7 +79,7 @@ class BestKnownMoveChooser:
   def restart(self):
     self.current_node = self.game_stats_tree
 
-  def request_move(self, current_player, possible_moves):
+  def request_move(self, current_player, grid, possible_moves):
     choose_random = random.random() > self.exploitation_rate
     if choose_random or \
          self.current_node is None or \
