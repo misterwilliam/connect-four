@@ -17,7 +17,7 @@ class BestKnownMoveChooser(MoveChooser):
     self.current_node = self.game_stats_tree
 
   def request_move(self, current_player, grid, possible_moves):
-    if self.heuristics:
+    if self.heuristic_move_chooser:
       heuristic_move = self.heuristic_move_chooser(current_player, grid, possible_moves)
       if heuristic_move is not None:
         return heuristic_move
