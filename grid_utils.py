@@ -18,6 +18,13 @@ def gen_straight_path(grid, start, step, max_length):
     if grid.is_inside(next_point):
       yield next_point
 
+def is_row_all(grid, row_index, value):
+  for col_index in range(grid.width):
+     if grid.at(Point(row_index, col_index)) is not value:
+      return False
+  else:
+    return True
+
 def is_in_row_run(grid, point, length):
   start_state = grid.at(point)
   num_matches_left = run_len(grid,
