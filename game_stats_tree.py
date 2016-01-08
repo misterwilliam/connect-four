@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from game import DiscState
 
 class Node:
