@@ -3,7 +3,8 @@ import os
 import pickle
 
 from game import Game, DiscState
-from move_chooser import BestKnownMoveChooser, UniformMoveChooser
+from best_known_move_chooser import BestKnownMoveChooser
+from uniform_move_chooser import UniformMoveChooser
 
 from compare_runtime import CompareRuntime
 from textual_runtime import TextualRuntime
