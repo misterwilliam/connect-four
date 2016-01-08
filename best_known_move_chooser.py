@@ -5,16 +5,22 @@ from move_chooser import MoveChooser
 
 class BestKnownMoveChooser(MoveChooser):
 
-  def __init__(self, game_stats_tree, exploitation_rate=1.0, verbose=False):
+  def __init__(self, game_stats_tree, exploitation_rate=1.0, verbose=False,
+               heuristic_move_chooser=None):
     self.game_stats_tree = game_stats_tree
     self.current_node = game_stats_tree
     self.exploitation_rate = exploitation_rate
     self.verbose = verbose
+    self.heuristic_move_chooser = heuristic_move_chooser
 
   def restart(self):
     self.current_node = self.game_stats_tree
 
   def request_move(self, current_player, grid, possible_moves):
+    if self.heuristics:
+      heuristic_move = self.heuristic_move_chooser(current_player, grid, possible_moves)
+      if heuristic_move is not None:
+        return heuristic_move
     choose_random = random.random() > self.exploitation_rate
     if choose_random or \
          self.current_node is None or \
