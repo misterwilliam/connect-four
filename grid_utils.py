@@ -25,8 +25,29 @@ def is_row_all(grid, row_index, value):
   else:
     return True
 
-def is_in_row_run(grid, point, length):
-  start_state = grid.at(point)
+def get_row_of_first(grid, col_index, value):
+  row = 0
+  while row < grid.height and grid.at(Point(row, col_index)) is not value:
+    row += 1
+  return row
+
+def left(point):
+  return Point(point.row, point.col - 1)
+
+def right(point):
+  return Point(point.row, point.col + 1)
+
+def up(point):
+  return Point(point.row + 1, point.col)
+
+def down(point):
+  return Point(point.row - 1, point.col)
+
+def is_in_row_run(grid, point, length, start_state=None):
+  if start_state is None:
+    start_state = grid.at(point)
+  else:
+    start_state = start_state
   num_matches_left = run_len(grid,
                              gen_straight_path(grid,
                                                Point(point.row, point.col - 1),
@@ -41,8 +62,11 @@ def is_in_row_run(grid, point, length):
                               start_state)
   return num_matches_left + num_matches_right >= length - 1
 
-def is_in_col_run(grid, point, length):
-  start_state = grid.at(point)
+def is_in_col_run(grid, point, length, start_state=None):
+  if start_state is None:
+    start_state = grid.at(point)
+  else:
+    start_state = start_state
   num_matches_down = run_len(grid,
                              gen_straight_path(grid,
                                                Point(point.row - 1, point.col),
@@ -57,8 +81,11 @@ def is_in_col_run(grid, point, length):
     start_state)
   return num_matches_down + num_matches_up >= length - 1
 
-def is_in_diag_down_run(grid, point, length):
-  start_state = grid.at(point)
+def is_in_diag_down_run(grid, point, length, start_state=None):
+  if start_state is None:
+    start_state = grid.at(point)
+  else:
+    start_state = start_state
   num_matches_diag_down_right = run_len(grid,
                                         gen_straight_path(grid,
                                                           Point(point.row + 1, point.col + 1),
@@ -73,8 +100,11 @@ def is_in_diag_down_run(grid, point, length):
     start_state)
   return num_matches_diag_down_right + num_matches_diag_up_left >= length - 1
 
-def is_in_diag_up_run(grid, point, length):
-  start_state = grid.at(point)
+def is_in_diag_up_run(grid, point, length, start_state=None):
+  if start_state is None:
+    start_state = grid.at(point)
+  else:
+    start_state = start_state
   num_matches_diag_down_left = run_len(grid,
                                        gen_straight_path(grid,
                                                          Point(point.row + 1, point.col - 1),

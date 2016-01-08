@@ -31,10 +31,12 @@ class CompareRuntime(Runtime):
       if self.game.current_player is DiscState.red:
         col_index = first_player_move_chooser.request_move(
           self.game.current_player,
+          self.game.grid,
          [move for move in range(self.game.grid.width)])
       else:
         col_index = second_player_move_chooser.request_move(
           self.game.current_player,
+          self.game.grid,
          [move for move in range(self.game.grid.width)])
       if self.game.can_add_disc(col_index):
         success = self.game.try_turn(self.game.current_player, col_index)

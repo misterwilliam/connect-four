@@ -4,6 +4,7 @@ import pickle
 
 from game import Game, DiscState
 from best_known_move_chooser import BestKnownMoveChooser
+from connect_four_heuristics import heuristic_move
 from uniform_move_chooser import UniformMoveChooser
 
 from compare_runtime import CompareRuntime
@@ -49,7 +50,8 @@ def train(models, num_iters, exploitation_rate, method):
     game_stats = get_model(model_path)
 
     if method == "best":
-      move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate)
+      move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate,
+        heuristic_move_chooser=heuristic_move)
     elif method == "uniform":
       move_chooser = UniformMoveChooser(game_stats, exploitation_rate)
     game_stats_tree.print_stats(game_stats)

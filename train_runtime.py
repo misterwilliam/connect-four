@@ -52,6 +52,6 @@ class TrainRuntime(Runtime):
         if num_fails > 100:
           print(col_index)
           self.game.render_board()
-          raise Error("Stucking searching for move")
+          raise Exception("Stucking searching for move")
 
     return self.game.winner

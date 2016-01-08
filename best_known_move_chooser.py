@@ -19,7 +19,7 @@ class BestKnownMoveChooser(MoveChooser):
   def request_move(self, current_player, grid, possible_moves):
     if self.heuristic_move_chooser:
       heuristic_move = self.heuristic_move_chooser(current_player, grid, possible_moves)
-      if heuristic_move is not None:
+      if heuristic_move is not None and heuristic_move in possible_moves:
         return heuristic_move
     choose_random = random.random() > self.exploitation_rate
     if choose_random or \
