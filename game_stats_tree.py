@@ -5,7 +5,9 @@ class Node:
   def __init__(self, children=None, win_counts=None):
     self.children = {} if children is None else children
     self.win_counts = {} if win_counts is None else win_counts
-    self.play_counts = 0 if win_counts is None else sum(win_counts.values())
+    self.play_counts = 0
+    if win_counts is not None:
+      self.play_counts = sum(win_counts.values())
 
   def __eq__(self, other):
     if self.children != other.children:
