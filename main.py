@@ -1,6 +1,8 @@
 import argparse
+import cProfile
 import os
 import pickle
+import pstats
 
 from game import Game, DiscState
 from best_known_move_chooser import BestKnownMoveChooser
@@ -25,6 +27,7 @@ train_parser.add_argument("--iters", type=int, default=100000,
 train_parser.add_argument("--exploitation_rate", type=float, default=0.65,
   help="Number of iterations used to train each model.")
 train_parser.add_argument("--method", choices=["best", "uniform"], default="best")
+train_parser.add_argument("--profile", action="store_true", default=False)
 
 # Configure compare command
 compare_parser = command_parser.add_parser("compare",
@@ -45,7 +48,11 @@ def get_model(path_to_model):
     game_stats = game_stats_tree.Node()
   return game_stats
 
-def train(models, num_iters, exploitation_rate, method):
+def train(models, num_iters, exploitation_rate, method, profile):
+  if profile:
+    pr = cProfile.Profile()
+    pr.enable()
+
   for model_path in models:
     game_stats = get_model(model_path)
 
@@ -58,6 +65,10 @@ def train(models, num_iters, exploitation_rate, method):
 
     runtime = TrainRuntime(Game(), move_chooser, game_stats, model_path)
     runtime.start(num_iters)
+
+  if profile:
+    ps = pstats.Stats(pr).sort_stats("cumtime")
+    ps.print_stats()
 
 def compare(model_a, model_b, num_iters):
   move_chooser_a = BestKnownMoveChooser(get_model(model_a))
@@ -79,7 +90,7 @@ def play(path_to_model):
 def main():
   args = parser.parse_args()
   if args.command == "train":
-    train(args.models, args.iters, args.exploitation_rate, args.method)
+    train(args.models, args.iters, args.exploitation_rate, args.method, args.profile)
   elif args.command == "play":
     play(args.model[0])
   elif args.command == "compare":
