@@ -70,7 +70,10 @@ def compare(model_a, model_b, num_iters):
 
 def play(path_to_model):
   model = get_model(path_to_model)
-  runtime = TextualRuntime(Game(), BestKnownMoveChooser(model, verbose=True))
+  runtime = TextualRuntime(Game(),
+                           BestKnownMoveChooser(model,
+                                                heuristic_move_chooser=heuristic_move,
+                                                verbose=True))
   runtime.start()
 
 def main():

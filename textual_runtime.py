@@ -18,6 +18,7 @@ class TextualRuntime(Runtime):
       while not self.game.is_end and self.state["continue"]:
         if self.game.current_player is DiscState.red:
           move = self.move_chooser.request_move(self.game.current_player,
+                                                self.game.grid,
                                                 [move for move in range(self.game.grid.width)])
           success = self.game.try_turn(self.game.current_player, move)
           if success:
