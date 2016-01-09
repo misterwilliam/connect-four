@@ -17,12 +17,9 @@ class BestKnownMoveChooser(MoveChooser):
     self.current_node = self.game_stats_tree
 
   def request_move(self, current_player, grid, possible_moves):
-    if self.heuristic_move_chooser:
-      heuristic_move = self.heuristic_move_chooser(current_player, grid, possible_moves)
-      if heuristic_move is not None and heuristic_move in possible_moves:
-        if self.verbose:
-          print("Selecting heuristicly: %i" % heuristic_move)
-        return heuristic_move
+    heuristic_move = self.get_heuristic_move(current_player, grid, possible_moves)
+    if heuristic_move is not None:
+      return heuristic_move
     choose_random = random.random() > self.exploitation_rate
     if choose_random or \
          self.current_node is None or \
@@ -50,6 +47,15 @@ class BestKnownMoveChooser(MoveChooser):
       self.current_node = self.current_node.children[move]
     else:
       self.current_node = None
+
+  def get_heuristic_move(self, current_player, grid, possible_moves):
+    if self.heuristic_move_chooser:
+      heuristic_move = self.heuristic_move_chooser(current_player, grid, possible_moves)
+      if heuristic_move is not None and heuristic_move in possible_moves:
+        if self.verbose:
+          print("Selecting heuristicly: %i" % heuristic_move)
+        return heuristic_move
+    return None
 
   def score_moves(self, current_player, current_node):
     move_scores = []
