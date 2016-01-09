@@ -13,30 +13,30 @@ class BestKnownMoveChooserTests(unittest.TestCase):
     grid = Grid(2, 2, initial_value=DiscState.empty)
     root = Node(children={
                   0: Node(children={
-                            0: Node(data={
+                            0: Node(win_counts={
                                       DiscState.red: 1,
                                       DiscState.black: 3,
                                     }),
-                            1: Node(data={
+                            1: Node(win_counts={
                                       DiscState.red: 5,
                                       DiscState.black: 0
                                     }),
                           },
-                          data={
+                          win_counts={
                             DiscState.red: 6,
                             DiscState.black: 3
                           }),
                   1: Node(children={
-                            0: Node(data={
+                            0: Node(win_counts={
                                 DiscState.red: 2,
                                 DiscState.black: 8
                               }),
-                            1: Node(data={
+                            1: Node(win_counts={
                                 DiscState.red: 3,
                                 DiscState.black: 3,
                               })
                           },
-                          data={
+                          win_counts={
                             DiscState.red: 5,
                             DiscState.black: 11
                           })

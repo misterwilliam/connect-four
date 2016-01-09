@@ -32,8 +32,8 @@ class UniformMoveChooser(MoveChooser):
   def score_moves(self, current_player, current_node):
     move_scores = []
     for move, child in current_node.children.items():
-      num_wins = child.data.get(current_player, 0)
-      total = sum(child.data.values())
+      num_wins = child.win_counts.get(current_player, 0)
+      total = sum(child.win_counts.values())
       move_scores.append((move, num_wins / total))
     return move_scores
 
