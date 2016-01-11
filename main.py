@@ -40,7 +40,7 @@ compare_parser.add_argument("--iters", type=int, default=500,
 # Configure play command
 play_parser = command_parser.add_parser("play", help="Play against a model")
 play_parser.add_argument("model", nargs=1, help="Models to play against")
-play_parser.add_argument("--no_use_heuristics", action="store_false", default=True)
+play_parser.add_argument("--no_use_heuristics", action="store_true", default=False)
 
 def get_model(path_to_model):
   if os.path.isfile(path_to_model):
