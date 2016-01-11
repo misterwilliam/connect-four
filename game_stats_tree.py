@@ -11,13 +11,10 @@ class Node:
 
   def __eq__(self, other):
     if self.children != other.children:
-      print(1)
       return False
     if self.win_counts != other.win_counts:
-      print(2)
       return False
     if self.play_counts != other.play_counts:
-      print(3)
       return False
     return True
 
