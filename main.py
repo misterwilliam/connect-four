@@ -28,6 +28,7 @@ train_parser.add_argument("--exploitation_rate", type=float, default=0.65,
   help="Number of iterations used to train each model.")
 train_parser.add_argument("--method", choices=["best", "uniform"], default="best")
 train_parser.add_argument("--profile", action="store_true", default=False)
+train_parser.add_argument("--use_heuristics", action="store_true", default=False)
 
 # Configure compare command
 compare_parser = command_parser.add_parser("compare",
@@ -39,6 +40,7 @@ compare_parser.add_argument("--iters", type=int, default=500,
 # Configure play command
 play_parser = command_parser.add_parser("play", help="Play against a model")
 play_parser.add_argument("model", nargs=1, help="Models to play against")
+play_parser.add_argument("--no_use_heuristics", action="store_false", default=True)
 
 def get_model(path_to_model):
   if os.path.isfile(path_to_model):
@@ -48,7 +50,7 @@ def get_model(path_to_model):
     game_stats = game_stats_tree.Node()
   return game_stats
 
-def train(models, num_iters, exploitation_rate, method, profile):
+def train(models, num_iters, exploitation_rate, method, profile, use_heuristics):
   if profile:
     pr = cProfile.Profile()
     pr.enable()
@@ -58,7 +60,7 @@ def train(models, num_iters, exploitation_rate, method, profile):
 
     if method == "best":
       move_chooser = BestKnownMoveChooser(game_stats, exploitation_rate,
-        heuristic_move_chooser=heuristic_move)
+        heuristic_move_chooser=heuristic_move if use_heuristics else None)
     elif method == "uniform":
       move_chooser = UniformMoveChooser(game_stats, exploitation_rate)
     game_stats_tree.print_stats(game_stats)
@@ -79,20 +81,22 @@ def compare(model_a, model_b, num_iters):
   print("%s: %.2f%%" % (model_a, a_wins * 100 / num_iters))
   print("%s: %.2f%%" % (model_b, b_wins * 100 / num_iters))
 
-def play(path_to_model):
+def play(path_to_model, no_use_heuristics):
   model = get_model(path_to_model)
   runtime = TextualRuntime(Game(),
-                           BestKnownMoveChooser(model,
-                                                heuristic_move_chooser=heuristic_move,
-                                                verbose=True))
+                           BestKnownMoveChooser(
+                            model,
+                            heuristic_move_chooser=None if no_use_heuristics else heuristic_move,
+                            verbose=True))
   runtime.start()
 
 def main():
   args = parser.parse_args()
   if args.command == "train":
-    train(args.models, args.iters, args.exploitation_rate, args.method, args.profile)
+    train(args.models, args.iters, args.exploitation_rate, args.method, args.profile,
+      args.use_heuristics)
   elif args.command == "play":
-    play(args.model[0])
+    play(args.model[0], args.no_use_heuristics)
   elif args.command == "compare":
     compare(args.models[0], args.models[1], args.iters)
 
