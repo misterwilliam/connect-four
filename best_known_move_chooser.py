@@ -61,8 +61,7 @@ class BestKnownMoveChooser(MoveChooser):
     move_scores = []
     for move, child in current_node.children.items():
       num_wins = child.win_counts.get(current_player, 0)
-      total = sum(child.win_counts.values())
-      move_scores.append((move, num_wins / total, total))
+      move_scores.append((move, num_wins / child.play_counts, child.play_counts))
     return move_scores
 
   def select_move(self, scored_moves):
